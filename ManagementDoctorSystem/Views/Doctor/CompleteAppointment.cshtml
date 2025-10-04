@@ -58,13 +58,13 @@
     document.addEventListener('DOMContentLoaded', function () {
         var appointmentForm = document.getElementById('appointmentForm');
         appointmentForm.addEventListener('submit', function (e) {
-            // Show the success modal after form submission
+           
             var myModal = new bootstrap.Modal(document.getElementById('successModal'), {
                 backdrop: 'static',
                 keyboard: false
             });
             myModal.show();
-            // Prevent the default form submission
+          
             e.preventDefault();
         });
     });
