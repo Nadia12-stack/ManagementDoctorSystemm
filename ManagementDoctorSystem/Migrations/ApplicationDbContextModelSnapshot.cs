@@ -44,10 +44,10 @@ namespace ManagementDoctorSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("doctors");
+                    b.ToTable("doctors", (string)null);
                 });
 
-            modelBuilder.Entity("ManagementDoctorSystem.Models.Pationt", b =>
+            modelBuilder.Entity("ManagementDoctorSystem.Models.Patient", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -58,8 +58,11 @@ namespace ManagementDoctorSystem.Migrations
                     b.Property<DateTime>("AppointmentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<TimeOnly>("AppointmentTime")
+                    b.Property<TimeSpan>("AppointmentTime")
                         .HasColumnType("time");
+
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -67,7 +70,25 @@ namespace ManagementDoctorSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("pationts");
+                    b.HasIndex("DoctorId");
+
+                    b.ToTable("Patients", (string)null);
+                });
+
+            modelBuilder.Entity("ManagementDoctorSystem.Models.Patient", b =>
+                {
+                    b.HasOne("ManagementDoctorSystem.Models.Doctor", "Doctor")
+                        .WithMany("Patients")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+                });
+
+            modelBuilder.Entity("ManagementDoctorSystem.Models.Doctor", b =>
+                {
+                    b.Navigation("Patients");
                 });
 #pragma warning restore 612, 618
         }

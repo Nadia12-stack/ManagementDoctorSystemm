@@ -7,6 +7,6 @@
         public string Specialization { get; set; } = string.Empty;
         public string Img { get; set; } = string.Empty;
 
-      //  public List<Pationt> pationts { get; set; } = null!;
+        public List<Patient> Patients { get; set; } = new();
     }
 }

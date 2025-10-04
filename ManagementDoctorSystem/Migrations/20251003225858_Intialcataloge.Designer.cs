@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManagementDoctorSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251003182055_InitialCatalog")]
-    partial class InitialCatalog
+    [Migration("20251003225858_Intialcataloge")]
+    partial class Intialcataloge
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,7 +50,7 @@ namespace ManagementDoctorSystem.Migrations
                     b.ToTable("doctors");
                 });
 
-            modelBuilder.Entity("ManagementDoctorSystem.Models.Pationt", b =>
+            modelBuilder.Entity("ManagementDoctorSystem.Models.Patient", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -61,8 +61,11 @@ namespace ManagementDoctorSystem.Migrations
                     b.Property<DateTime>("AppointmentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<TimeOnly>("AppointmentTime")
+                    b.Property<TimeSpan>("AppointmentTime")
                         .HasColumnType("time");
+
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -70,7 +73,25 @@ namespace ManagementDoctorSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("pationts");
+                    b.HasIndex("DoctorId");
+
+                    b.ToTable("Patients");
+                });
+
+            modelBuilder.Entity("ManagementDoctorSystem.Models.Patient", b =>
+                {
+                    b.HasOne("ManagementDoctorSystem.Models.Doctor", "Doctor")
+                        .WithMany("Patients")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+                });
+
+            modelBuilder.Entity("ManagementDoctorSystem.Models.Doctor", b =>
+                {
+                    b.Navigation("Patients");
                 });
 #pragma warning restore 612, 618
         }

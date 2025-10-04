@@ -1,0 +1,34 @@
+﻿@using ManagementDoctorSystem.Models
+@model IEnumerable<ManagementDoctorSystem.ViewModels.ReservationVM>
+
+
+@{
+    ViewData["Title"] = "Reservations Management";
+}
+
+<h1>Reservations Management</h1>
+
+<p>@Model.FirstOrDefault()?.DoctorName</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Doctor Name</th>
+            <th>Patient Name</th>
+            <th>Appointment Date</th>
+            <th>Appointment Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.DoctorName</td>
+                <td>@item.PatientName</td>
+                <td>@item.AppointmentDate</td>
+                <td>@item.AppointmentTime</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
