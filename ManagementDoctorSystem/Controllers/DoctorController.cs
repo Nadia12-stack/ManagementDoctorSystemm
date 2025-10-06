@@ -64,7 +64,7 @@ namespace ManagementDoctorSystem.Controllers
             if (dayOfWeek == DayOfWeek.Friday || dayOfWeek == DayOfWeek.Saturday)
             {
                 TempData["Error"] = "Appointments are only available from Sunday to Thursday.";
-                return RedirectToAction("CompleteAppointment");
+                return RedirectToAction("CompleteAppointment", new { doctorId = patientVM.doctorId });
 
             }
 
@@ -75,14 +75,14 @@ namespace ManagementDoctorSystem.Controllers
             if (hour < 8 || hour >= 17)
             {
                 TempData["Error"] = "Appointments are available between 8:00 AM and 5:00 PM only.";
-                return RedirectToAction("CompleteAppointment");
+                return RedirectToAction("CompleteAppointment", new { doctorId = patientVM.doctorId });
             }
 
 
             if (minute != 0 && minute != 30)
             {
                 TempData["Error"] = "Appointments must be scheduled in 30-minute intervals (e.g., 8:00 or 8:30).";
-                return RedirectToAction("CompleteAppointment");
+                return RedirectToAction("CompleteAppointment", new { doctorId = patientVM.doctorId });
             }
 
 
@@ -93,7 +93,7 @@ namespace ManagementDoctorSystem.Controllers
             if (isTaken)
             {
                 TempData["Error"] = "This time slot is already booked. Please choose another.";
-                return RedirectToAction("CompleteAppointment");
+                return RedirectToAction("CompleteAppointment", new { doctorId = patientVM.doctorId });
 
             }
 
@@ -108,7 +108,7 @@ namespace ManagementDoctorSystem.Controllers
                 _context.SaveChanges();
 
                 TempData["Success"] = "Appointment successfully updated!";
-                return RedirectToAction("CompleteAppointment");
+                return RedirectToAction("CompleteAppointment", new { doctorId = patientVM.doctorId });
             }
             else
             {
