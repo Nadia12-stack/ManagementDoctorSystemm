@@ -1,5 +1,5 @@
 ﻿using AspNetCoreGeneratedDocument;
-
+using ManagementDoctorSystem.Models;
 using ManagementManagementDoctorSystem.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -34,28 +34,43 @@ namespace ManagementDoctorSystem.Controllers
         }
 
         [HttpGet]
-        public IActionResult CompleteAppointment()
+        public IActionResult CompleteAppointment(int doctorId)
         {
-            var patients = _context.Patients.ToList();
-            return View(patients);
+            var doctor = _context.doctors.FirstOrDefault(d => d.Id == doctorId);
+            if (doctor == null)
+            {
+                TempData["Error"] = "Doctor not found.";
+                return RedirectToAction("BookAppointment");
+            }
+
+            var model = new PatientVM(
+                doctorId: doctor.Id,
+                patientName: "",
+                appointmentDate: DateTime.Today,
+                appointmentTime: new TimeSpan(8, 0, 0),
+                DoctorName: doctor.Name
+            );
+
+            return View(model);
         }
+
 
 
         [HttpPost]
         public IActionResult CompleteAppointment(PatientVM patientVM)
         {
-            var Patient = _context.Patients.AsQueryable();
+            var Patientt = _context.Patients.AsQueryable();
             var dayOfWeek = patientVM.appointmentDate.DayOfWeek;
             if (dayOfWeek == DayOfWeek.Friday || dayOfWeek == DayOfWeek.Saturday)
             {
                 TempData["Error"] = "Appointments are only available from Sunday to Thursday.";
                 return RedirectToAction("CompleteAppointment");
-                
+
             }
 
-            
+
             int hour = patientVM.appointmentTime.Hours;
-            int minute = patientVM. appointmentTime.Minutes;
+            int minute = patientVM.appointmentTime.Minutes;
 
             if (hour < 8 || hour >= 17)
             {
@@ -63,14 +78,14 @@ namespace ManagementDoctorSystem.Controllers
                 return RedirectToAction("CompleteAppointment");
             }
 
-            
+
             if (minute != 0 && minute != 30)
             {
                 TempData["Error"] = "Appointments must be scheduled in 30-minute intervals (e.g., 8:00 or 8:30).";
                 return RedirectToAction("CompleteAppointment");
             }
 
-            
+
             var isTaken = _context.Patients.Any(p =>
                 p.AppointmentDate.Date == patientVM.appointmentDate.Date &&
                 p.AppointmentTime == patientVM.appointmentTime);
@@ -82,7 +97,7 @@ namespace ManagementDoctorSystem.Controllers
 
             }
 
-            
+
             var existingPatient = _context.Patients.FirstOrDefault(p => p.Name == patientVM.patientName);
 
             if (existingPatient != null)
@@ -93,33 +108,51 @@ namespace ManagementDoctorSystem.Controllers
                 _context.SaveChanges();
 
                 TempData["Success"] = "Appointment successfully updated!";
-                return RedirectToAction("ReservationsManagement");
+                return RedirectToAction("CompleteAppointment");
             }
             else
             {
-                TempData["Error"] = "Patient not found in the system.";
-                return RedirectToAction("CompleteAppointment");
+                var patients = _context.Patients;
+                ViewBag.Patients = patients.ToList();
+                var doctors = _context.doctors;
+                ViewBag.doctors = doctors.ToList();
+
+                var newPatient = new Patient
+                {
+                    Name = patientVM.patientName,
+                    AppointmentDate = patientVM.appointmentDate,
+                    AppointmentTime = patientVM.appointmentTime,
+                    DoctorId = patientVM.doctorId
+
+                };
+                _context.Patients.Add(newPatient);
             }
 
-          
-
+            _context.SaveChanges();
+            TempData["Success"] = "Appointment successfully booked!";
+            return RedirectToAction("CompleteAppointment", new { doctorId = patientVM.doctorId });
         }
+
+
+
+
 
         [HttpGet]
         public IActionResult ReservationsManagement(ReservationVM reservationVM)
         {
             var reservations = _context.Patients
-                .Include(p => p.Doctor) 
+                .Include(p => p.Doctor)
                 .Select(p => new ReservationVM
                 {
                     DoctorName = p.Doctor.Name,
                     PatientName = p.Name,
                     AppointmentDate = p.AppointmentDate,
-                    AppointmentTime = p.AppointmentTime
+                    AppointmentTime = p.AppointmentTime,
+                    DoctorId = p.DoctorId
                 })
-                .ToList(); 
+                .ToList();
 
-            return View(reservations); 
+            return View(reservations);
         }
 
 

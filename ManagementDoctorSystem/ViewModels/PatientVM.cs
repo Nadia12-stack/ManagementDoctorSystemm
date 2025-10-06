@@ -1,7 +1,7 @@
 ﻿namespace ManagementDoctorSystem.ViewModels
 {
     public record PatientVM(
-        string patientName, DateTime appointmentDate, TimeSpan appointmentTime
+     int doctorId,   string patientName, DateTime appointmentDate, TimeSpan appointmentTime, string DoctorName
         );
     
 }

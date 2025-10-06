@@ -1,43 +1,53 @@
-﻿@using ManagementDoctorSystem.Models
-@model List<Patient>
+﻿@model PatientVM
 
 @{
     ViewData["Title"] = "Complete Appointment";
 }
 
-<h1>Complete Appointment with Doctor Name</h1>
+<section class="appointment-form-section py-5 fade-in">
+    <div class="container">
+        <h2 class="text-center mb-4">Complete Appointment with @Model.DoctorName</h2>
 
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger">@TempData["Error"]</div>
-}
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success">@TempData["Success"]</div>
-}
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger text-center">@TempData["Error"]</div>
+        }
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success text-center">@TempData["Success"]</div>
+        }
 
-<form method="post" asp-action="CompleteAppointment" asp-controller="Doctor">
+        <form method="post" asp-action="CompleteAppointment" asp-controller="Doctor" id="appointmentForm">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label for="patientName" class="form-label">Patient Name</label>
+                    <input type="text" class="form-control form-control-lg" id="patientName" name="patientName" required>
+                </div>
 
-    <div class="form-group">
-        <label for="patientName">Patient Name:</label>
-        <input type="text" class="form-control" id="patientName" name="patientName" required>
+                <div class="col-md-6">
+                    <label class="form-label">Doctor Name</label>
+                    <input type="text" class="form-control form-control-lg" value="@Model.DoctorName" readonly />
+                    <input type="hidden" name="doctorId" value="@Model.doctorId" />
+                </div>
+
+                <div class="col-md-6">
+                    <label for="appointmentDate" class="form-label">Appointment Date</label>
+                    <input type="date" class="form-control form-control-lg" id="appointmentDate" name="appointmentDate" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="appointmentTime" class="form-label">Appointment Time</label>
+                    <input type="time" class="form-control form-control-lg" id="appointmentTime" name="appointmentTime" required>
+                </div>
+
+                <div class="col-12 d-flex justify-content-center mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg me-3">Complete Appointment</button>
+                    <a href="/Doctor/ReservationsManagement" class="btn btn-outline-secondary btn-lg">Reservations Management</a>
+                </div>
+            </div>
+        </form>
     </div>
-
-    <div class="form-group">
-        <label for="appointmentDate">Appointment Date:</label>
-        <input type="date" class="form-control" id="appointmentDate" name="appointmentDate" required>
-    </div>
-
-    <div class="form-group">
-        <label for="appointmentTime">Appointment Time:</label>
-        <input type="time" class="form-control" id="appointmentTime" name="appointmentTime" required>
-    </div>
-
-    <br />
-    <button type="submit" class="btn btn-primary">Complete Appointment</button>
-
-</form>
-
+</section>
 
 <!-- Success Modal -->
 <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
@@ -58,13 +68,11 @@
     document.addEventListener('DOMContentLoaded', function () {
         var appointmentForm = document.getElementById('appointmentForm');
         appointmentForm.addEventListener('submit', function (e) {
-            // Show the success modal after form submission
             var myModal = new bootstrap.Modal(document.getElementById('successModal'), {
                 backdrop: 'static',
                 keyboard: false
             });
             myModal.show();
-            // Prevent the default form submission
             e.preventDefault();
         });
     });

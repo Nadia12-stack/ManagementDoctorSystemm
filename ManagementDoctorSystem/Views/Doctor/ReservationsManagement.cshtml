@@ -1,34 +1,38 @@
 ﻿@using ManagementDoctorSystem.Models
-@model IEnumerable<ManagementDoctorSystem.ViewModels.ReservationVM>
-
+@model IEnumerable<ReservationVM>
 
 @{
     ViewData["Title"] = "Reservations Management";
 }
 
-<h1>Reservations Management</h1>
+<section class="reservations-section py-5 fade-in">
+    <div class="container">
+        <h2 class="text-center mb-4">Reservations Management</h2>
 
-<p>@Model.FirstOrDefault()?.DoctorName</p>
-
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Doctor Name</th>
-            <th>Patient Name</th>
-            <th>Appointment Date</th>
-            <th>Appointment Time</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.DoctorName</td>
-                <td>@item.PatientName</td>
-                <td>@item.AppointmentDate</td>
-                <td>@item.AppointmentTime</td>
-            </tr>
-        }
-    </tbody>
-</table>
-
+        <div class="table-responsive">
+            <table class="table table-striped table-hover shadow-sm rounded overflow-hidden">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Doctor ID</th>
+                        <th>Doctor Name</th>
+                        <th>Patient Name</th>
+                        <th>Appointment Date</th>
+                        <th>Appointment Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.DoctorId</td>
+                            <td>@item.DoctorName</td>
+                            <td>@item.PatientName</td>
+                            <td>@item.AppointmentDate.ToString("MM/dd/yyyy")</td>
+                            <td>@item.AppointmentTime</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
