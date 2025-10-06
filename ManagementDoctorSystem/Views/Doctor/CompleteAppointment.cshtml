@@ -1,9 +1,5 @@
 ﻿@model PatientVM
 
-@{
-    ViewData["Title"] = "Complete Appointment";
-}
-
 <section class="appointment-form-section py-5 fade-in">
     <div class="container">
         <h2 class="text-center mb-4">Complete Appointment with @Model.DoctorName</h2>
@@ -20,24 +16,24 @@
         <form method="post" asp-action="CompleteAppointment" asp-controller="Doctor" id="appointmentForm">
             <div class="row g-4">
                 <div class="col-md-6">
-                    <label for="patientName" class="form-label">Patient Name</label>
-                    <input type="text" class="form-control form-control-lg" id="patientName" name="patientName" required>
+                    <label asp-for="patientName" class="form-label">Patient Name</label>
+                    <input asp-for="patientName" class="form-control form-control-lg" required />
                 </div>
 
                 <div class="col-md-6">
                     <label class="form-label">Doctor Name</label>
                     <input type="text" class="form-control form-control-lg" value="@Model.DoctorName" readonly />
-                    <input type="hidden" name="doctorId" value="@Model.doctorId" />
+                    <input asp-for="doctorId" type="hidden" />
                 </div>
 
                 <div class="col-md-6">
-                    <label for="appointmentDate" class="form-label">Appointment Date</label>
-                    <input type="date" class="form-control form-control-lg" id="appointmentDate" name="appointmentDate" required>
+                    <label asp-for="appointmentDate" class="form-label">Appointment Date</label>
+                    <input asp-for="appointmentDate" type="date" class="form-control form-control-lg" required />
                 </div>
 
                 <div class="col-md-6">
-                    <label for="appointmentTime" class="form-label">Appointment Time</label>
-                    <input type="time" class="form-control form-control-lg" id="appointmentTime" name="appointmentTime" required>
+                    <label asp-for="appointmentTime" class="form-label">Appointment Time</label>
+                    <input asp-for="appointmentTime" type="time" class="form-control form-control-lg" required />
                 </div>
 
                 <div class="col-12 d-flex justify-content-center mt-4">
@@ -48,19 +44,3 @@
         </form>
     </div>
 </section>
-
-
-
-@* <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var appointmentForm = document.getElementById('appointmentForm');
-        appointmentForm.addEventListener('submit', function (e) {
-            var myModal = new bootstrap.Modal(document.getElementById('successModal'), {
-                backdrop: 'static',
-                keyboard: false
-            });
-            myModal.show();
-            e.preventDefault();
-        });
-    });
-</script> *@

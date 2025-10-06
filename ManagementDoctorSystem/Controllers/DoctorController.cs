@@ -72,6 +72,7 @@ namespace ManagementDoctorSystem.Controllers
             int hour = patientVM.appointmentTime.Hours;
             int minute = patientVM.appointmentTime.Minutes;
 
+
             if (hour < 8 || hour >= 17)
             {
                 TempData["Error"] = "Appointments are available between 8:00 AM and 5:00 PM only.";
@@ -98,7 +99,11 @@ namespace ManagementDoctorSystem.Controllers
             }
 
 
-            var existingPatient = _context.Patients.FirstOrDefault(p => p.Name == patientVM.patientName);
+            var existingPatient = _context.Patients.FirstOrDefault(p =>
+                p.Name == patientVM.patientName &&
+                p.AppointmentDate == patientVM.appointmentDate &&
+                p.AppointmentTime == patientVM.appointmentTime);
+
 
             if (existingPatient != null)
             {
@@ -123,9 +128,10 @@ namespace ManagementDoctorSystem.Controllers
                     AppointmentDate = patientVM.appointmentDate,
                     AppointmentTime = patientVM.appointmentTime,
                     DoctorId = patientVM.doctorId
-
                 };
                 _context.Patients.Add(newPatient);
+              
+
             }
 
             _context.SaveChanges();
