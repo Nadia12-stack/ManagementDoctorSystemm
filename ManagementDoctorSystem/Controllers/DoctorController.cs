@@ -1,6 +1,4 @@
-﻿using AspNetCoreGeneratedDocument;
-using ManagementDoctorSystem.Models;
-using ManagementManagementDoctorSystem.Controllers;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
